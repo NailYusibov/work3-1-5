@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.service.UserServiceImp;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
-    private final UserServiceImp userService;
+    private final UserService userService;
     private final RoleService roleService;
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
-
 
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
@@ -29,12 +29,12 @@ public class AdminController {
     }
 
     @Autowired
-    public AdminController(UserServiceImp userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping("/admin")  //Отображает список пользователей в административной панели
+    @GetMapping  //Отображает список пользователей в административной панели
     public String showListUsers(Model model) {
         List<User> users = userService.listUsers();
         model.addAttribute("users", users);
@@ -42,7 +42,7 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/admin/new")  //Отображает форму добавления нового пользователя
+    @GetMapping("/new")  //Отображает форму добавления нового пользователя
     public String showAddUserForm(Model model) {
         User user = new User();
         model.addAttribute("user", user);
@@ -51,14 +51,14 @@ public class AdminController {
         return "addUser";
     }
 
-    @PostMapping("/admin/add")  //Обрабатывает запрос на добавление нового пользователя
+    @PostMapping("/add")  //Обрабатывает запрос на добавление нового пользователя
     public String addUser(@ModelAttribute("user") User user) {
         userService.add(user);
         logger.info("Добавлен новый пользователь: {}", user.getUsername());
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/edit")  //Отображает форму редактирования пользователя по его ID
+    @GetMapping("/edit")  //Отображает форму редактирования пользователя по его ID
     public String showEditUserForm(@RequestParam("id") Long id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
@@ -67,14 +67,14 @@ public class AdminController {
         return "editUser";
     }
 
-    @PutMapping("/admin/update")  //Обрабатывает запрос на обновление информации о пользователе
+    @PutMapping("/update")  //Обрабатывает запрос на обновление информации о пользователе
     public String updateUser(@ModelAttribute("user") User user) {
         userService.update(user);
         logger.info("Обновлён пользователь с ID {}", user.getId());
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/admin/delete")  //Обрабатывает запрос на удаление пользователя по его ID.
+    @DeleteMapping("/delete")  //Обрабатывает запрос на удаление пользователя по его ID.
     public String deleteUser(@RequestParam("id") Long id) {
         userService.delete(id);
         logger.info("Удалён пользователь с ID {}", id);
