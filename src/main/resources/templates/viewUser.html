@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>View User</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" role="dialog" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewUserModalLabel">Delete user</h5>
+            </div>
+            <div class="modal-body">
+                <form id="deleteUserForm" th:action="@{/admin/delete}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="id" id="deleteUserId" th:value="${user.id}"/>
+                    <div class="form-group">
+                        <label for="id">ID</label>
+                        <input type="text" id="id" th:value="${user.id}" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">FirstName</label>
+                        <input type="text" id="firstName" th:value="${user.firstName}" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">LastName</label>
+                        <input type="text" id="lastName" th:value="${user.lastName}" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="text" id="age" th:value="${user.age}" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" th:value="${user.email}" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="roles">Roles</label>
+                        <select id="roles" class="form-control" multiple readonly>
+                            <option th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role.name}"
+                                    th:selected="${user.roles.contains(role)}" disabled></option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="closeButton">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Скрипты для работы модального окна -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Скрипт для запуска модального окна -->
+<script>
+    $(document).ready(function() {
+        $('#viewUserModal').modal('show');
+
+        // Обработчик для кнопки "Close"
+        $('#closeButton').click(function() {
+            $('#viewUserModal').modal('hide');
+            window.location.href = '/admin'; // Перенаправление на панель администратора
+        });
+
+        // Обработчик для формы удаления
+        $('#deleteUserForm').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function() {
+                    $('#viewUserModal').modal('hide');
+                    window.location.href = '/admin'; // Перенаправление на панель администратора после удаления
+                },
+                error: function() {
+                    alert('Error deleting user');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

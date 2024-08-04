@@ -1,52 +1,77 @@
+
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>UserInfo</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Username</th>
-        <th>Age</th>
-        <th>Email</th>
-        <th>Password</th>
-        <th>Roles</th>
-    </tr>
-    </thead>
-    <tbody>
-    <td th:text="${user.id}"></td>
-    <td th:text="${user.firstName}"></td>
-    <td th:text="${user.lastName}"></td>
-    <td th:text="${user.username}"></td>
-    <td th:text="${user.age}"></td>
-    <td th:text="${user.email}"></td>
-    <td th:text="${user.password}"></td>
-    <td>
-        <ul>
-            <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">User Info</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">User</a>
+            </li>
         </ul>
-    </td>
-    </tbody>
-</table>
-<form th:action="@{/logout}" method="post" class="logout-form">
-    <button type="submit">Logout</button>
-</form>
-=======
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <title>Spring Security Example</title>
-</head>
-<body>
-<h1>User, welcome spring boot security page!</h1>
+        <span class="navbar-text mr-3">
+            user@mail.ru with roles: USER
+        </span>
+        <form th:action="@{/logout}" method="post" class="form-inline">
+            <button class="btn btn-outline-light" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">User</a>
+            </div>
+        </div>
+        <div class="col-10">
+            <h2>User information-page</h2>
+            <div class="card mt-3">
+                <div class="card-header">
+                    About user
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.firstName}"></td>
+                            <td th:text="${user.lastName}"></td>
+                            <td th:text="${user.age}"></td>
+                            <td th:text="${user.email}"></td>
 
-
->>>>>>> 32713088c5243aa46bce4ab221ff995c40214498
+                            <td>
+                                <ul class="list-unstyled mb-0">
+                                    <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

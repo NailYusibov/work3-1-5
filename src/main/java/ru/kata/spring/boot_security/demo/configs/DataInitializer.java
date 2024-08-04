@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.configs;
+package ru.kata.spring.boot_security.demo.configs;//*package ru.kata.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,6 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,14 +36,9 @@ public class DataInitializer {
         adminUser.setRoles(new HashSet<>(Arrays.asList(adminRole, userRole)));
         userRepository.save(adminUser);
 
-        User userUser1 = new User("user1", passwordEncoder.encode("user1"));
+        User userUser1 = new User("user", passwordEncoder.encode("user"));
         userUser1.setRoles(Collections.singleton(userRole));
         userRepository.save(userUser1);
-
-        User userUser2 = new User("user2", passwordEncoder.encode("user2"));
-        userUser2.setRoles(Collections.singleton(userRole));
-        userRepository.save(userUser2);
-
 
     }
 }
