@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,33 +29,41 @@ public class UserServiceImp implements UserService {
         userRepository.save(user);
     }
 
-    @Override
     @Transactional
-    public void update(User user) {
-        User existingUser = userRepository.findById(user.getId())
+    @Override
+    public void update(User updatedUser, String newPassword) {
+        User existingUser = userRepository.findById(updatedUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (!user.getPassword().equals(existingUser.getPassword())) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            String hashedPassword = bCryptPasswordEncoder.encode(newPassword);
+            existingUser.setPassword(hashedPassword);
         }
-        userRepository.save(user);
+
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setAge(updatedUser.getAge());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setRoles(updatedUser.getRoles());
+
+        userRepository.save(existingUser);
     }
 
-    @Override
     @Transactional
+    @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public List<User> listUsers() {
         return userRepository.findAll();
-
     }
 }
